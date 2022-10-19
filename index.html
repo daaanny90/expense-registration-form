@@ -47,12 +47,7 @@
           amount: expAmount
         })
       }).then(function (response) {
-        if (response.ok) {
-          status.innerHTML = "Salvato."
-        } else {
-          console.log(response)
-          status.innerHTML =  `Errore, risposta ${response}. Riprovare.`
-        }
+         status.innerHTML = "Salvato."
       }).catch(function (e) {
         stats.innerHTML = "Errore, aprire console per i dettagli."
         console.error(e);
