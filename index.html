@@ -22,16 +22,18 @@
   <input id="exp-amount" type="number">
 
   <button id="submit-button">Invia</button>
+  <span id="status"></span>
 
 
   <script>
     let submit = document.querySelector('#submit-button');
+    let status = document.querySelector('#status');
 
     function sendExp() {
       let expType = document.querySelector('#exp-type').value;
       let expDate = document.querySelector('#exp-date').value;
       let expAmount = document.querySelector('#exp-amount').value;
-      
+
       console.log('click')
       fetch('https://script.google.com/macros/s/AKfycbx5d7Exs46LichBhn4eqWM-ogAcrfpvj3GDXXQIGcMrflPVLumOXqw3dLxsZ1tp_SgM/exec', {
         method: 'POST',
@@ -44,20 +46,16 @@
           date: expDate,
           amount: expAmount
         })
-      }).then(function(response) {
-        // The API call was successful!
+      }).then(function (response) {
         if (response.ok) {
-          return response.json();
+          status.innerHTML = "Salvato."
         } else {
-          return Promise.reject(response);
+          status.innerHTML =  `Errore, risposta ${response}. Riprovare.`
         }
-      }).then(function(data) {
-        // This is the JSON from our response
-        console.log(data);
-      }).catch(function(err) {
-        // There was an error
-        console.warn('Something went wrong.', err);
-      });
+      }).catch(function (e) {
+        stats.innerHTML = "Errore, aprire console per i dettagli."
+        console.error(e);
+      })
     }
 
     submit.addEventListener("click", sendExp);
