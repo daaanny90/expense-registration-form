@@ -50,6 +50,7 @@
         if (response.ok) {
           status.innerHTML = "Salvato."
         } else {
+          console.log(response)
           status.innerHTML =  `Errore, risposta ${response}. Riprovare.`
         }
       }).catch(function (e) {
