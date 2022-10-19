@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <form>
+      <label for="exp-type">Tipo di spesa</label>
+      <select id="exp-type">
+        <option value="1">Spesa Alimentare</option>
+        <option value="2">Altro</option>
+        <option value="3">Extra Danny</option>
+        <option value="4">Extra Erica</option>
+      </select>
+
+      <label for="exp-date">Data</label>
+      <input id="exp-date" type="date">
+
+      <label for="exp-amount">Cifra</label>
+      <input id="exp-amount" type="number">
+
+      <button type="submit" onclick="sendExp">Invia</button>
+    </form>
+
+    <script>
+      let expType = document.querySelector('#exp-type').value;
+      let expDate = document.querySelector('#exp-date').value;
+      let expAmount = document.querySelector('#exp-amount').value;
+
+      function sendExp() {
+        fetch('https://script.google.com/macros/s/AKfycbymDcF31BONxfbjBmewtJRuylmH7XKaRX9c-yaITLqv64-lTdKYr_PCrFmXoyursjJd/exec', {
+          method: 'POST',
+          body:
+            {
+              "type": expType,
+              "date": expDate,
+              "amount": expAmount
+            }
+        }).then(function (response) {
+          // The API call was successful!
+          if (response.ok) {
+            return response.json();
+          } else {
+            return Promise.reject(response);
+          }
+        }).then(function (data) {
+          // This is the JSON from our response
+          console.log(data);
+        }).catch(function (err) {
+          // There was an error
+          console.warn('Something went wrong.', err);
+        });
+      }
+    </script>
+  </body>
+</html>
