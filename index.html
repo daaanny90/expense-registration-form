@@ -34,6 +34,9 @@
       console.log('click')
       fetch('https://script.google.com/macros/s/AKfycbymDcF31BONxfbjBmewtJRuylmH7XKaRX9c-yaITLqv64-lTdKYr_PCrFmXoyursjJd/exec', {
         method: 'POST',
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        },
         body: {
           "type": expType,
           "date": expDate,
