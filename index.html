@@ -34,14 +34,15 @@
       console.log('click')
       fetch('https://script.google.com/macros/s/AKfycbymDcF31BONxfbjBmewtJRuylmH7XKaRX9c-yaITLqv64-lTdKYr_PCrFmXoyursjJd/exec', {
         method: 'POST',
+        mode: 'no-cors',
         headers: {
-          "Access-Control-Allow-Origin": "*"
+          "Content-Type": "application/json",
         },
-        body: {
-          "type": expType,
-          "date": expDate,
-          "amount": expAmount
-        }
+        body: JSON.stringify({
+          type: expType,
+          date: expDate,
+          amount: expAmount
+        })
       }).then(function(response) {
         // The API call was successful!
         if (response.ok) {
