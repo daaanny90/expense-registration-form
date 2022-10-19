@@ -4,7 +4,7 @@
     <base target="_top">
   </head>
   <body>
-    <form>
+    
       <label for="exp-type">Tipo di spesa</label>
       <select id="exp-type">
         <option value="1">Spesa Alimentare</option>
@@ -20,7 +20,7 @@
       <input id="exp-amount" type="number">
 
       <button onclick="sendExp">Invia</button>
-    </form>
+    
 
     <script>
       let expType = document.querySelector('#exp-type').value;
@@ -28,6 +28,7 @@
       let expAmount = document.querySelector('#exp-amount').value;
 
       function sendExp() {
+        console.log('click')
         fetch('https://script.google.com/macros/s/AKfycbymDcF31BONxfbjBmewtJRuylmH7XKaRX9c-yaITLqv64-lTdKYr_PCrFmXoyursjJd/exec', {
           method: 'POST',
           body:
