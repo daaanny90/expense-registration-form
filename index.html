@@ -25,12 +25,13 @@
 
 
   <script>
-    let expType = document.querySelector('#exp-type').value;
-    let expDate = document.querySelector('#exp-date').value;
-    let expAmount = document.querySelector('#exp-amount').value;
     let submit = document.querySelector('#submit-button');
 
     function sendExp() {
+      let expType = document.querySelector('#exp-type').value;
+      let expDate = document.querySelector('#exp-date').value;
+      let expAmount = document.querySelector('#exp-amount').value;
+      
       console.log('click')
       fetch('https://script.google.com/macros/s/AKfycbzZeobc6dVyO-qpFjvdb8uXxGCdNmjPwtPlfIvQuUxozq91hI3-F-lFQ9XU3kAvwS_K/exec', {
         method: 'POST',
