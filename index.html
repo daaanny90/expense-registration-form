@@ -1,41 +1,81 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Family Budget</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <base target="_top">
 
-<head>
-  <base target="_top">
-</head>
+    <style>
+      .notification {
+        display: none;
+      }
 
-<body>
+      .notification.active {
+        display: block;
+      }
 
-  <label for="exp-type">Tipo di spesa</label>
-  <select id="exp-type">
-    <option value="1">Spesa Alimentare</option>
-    <option value="2">Altro</option>
-    <option value="3">Extra Danny</option>
-    <option value="4">Extra Erica</option>
-  </select>
+      .navbar-item img {
+        max-height: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+          <img src="logo.png"
+          alt="Family App to manage personal finance" width="120" height="48"/>
+        </a>
+    </div>
+  </nav>
+  
+  <section class="section">
+    <div class="container">
+      <div class="field">
+        <label class="label">Denaro speso</label>
+        <div class="control">
+          <input id="exp-amount" class="input" type="number" placeholder="Text input">
+        </div>
+      </div>
+    
+      <div class="field">
+        <label class="label">Tipo di spesa</label>
+        <div class="control">
+          <div class="select">
+            <select id="exp-type">
+              <option value="1">Spesa Alimentare</option>
+              <option value="2">Altro</option>
+              <option value="3">Extra Danny</option>
+              <option value="4">Extra Erica</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="field is-grouped">
+        <div class="control">
+          <button id="submit-button" class="button is-link">Salva</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <label for="exp-date">Data</label>
-  <input id="exp-date" type="date">
-
-  <label for="exp-amount">Cifra</label>
-  <input id="exp-amount" type="number">
-
-  <button id="submit-button">Invia</button>
-  <span id="status"></span>
-
+  <div class="notification is-primary is-light">
+    <button class="delete"></button>
+  </div>
 
   <script>
     let submit = document.querySelector('#submit-button');
-    let status = document.querySelector('#status');
+    let notification = document.querySelector('.notification');
 
     function sendExp() {
       let expType = document.querySelector('#exp-type').value;
-      let expDate = document.querySelector('#exp-date').value;
       let expAmount = document.querySelector('#exp-amount').value;
 
-      console.log('click')
-      fetch('https://script.google.com/macros/s/AKfycbzLOAasVDrVbbVfzKP7ZP5i3oriJ24PFpX8osnTVw6QtfO_Y_O_WaIHNgvMfxWFXPLi/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbz-pO2A9ZRmOePYEIIRAv_oqkKkhK0_7UGRRhwTzqHDCvX2GOLIQhpWBQR3NOIOE826/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
@@ -43,17 +83,30 @@
         },
         body: JSON.stringify({
           type: expType,
-          date: expDate,
           amount: expAmount
         })
       }).then(function (response) {
-         status.innerHTML = "Salvato."
+        notification.appendChild(document.createTextNode("Salvato."));
+        notification.classList.add('active');
+        
+        setTimeout(() => {
+          notification.parentNode.removeChild(notification);
+        }, 3000);
       }).catch(function (e) {
-        stats.innerHTML = "Errore, aprire console per i dettagli."
+        notification.innerHTML = "Errore, aprire console per i dettagli."
         console.error(e);
       })
     }
 
+    function showNotification(text) {
+      notification.appendChild(document.createTextNode(text));
+
+      notification.classList.add('active');
+      setTimeout(() => {
+        document.querySelector('.delete').click();
+      }, 3000);
+    }
+    
     submit.addEventListener("click", sendExp);
   </script>
 </body>
