@@ -67,13 +67,30 @@
     <button class="delete"></button>
   </div>
 
+  <div class="notification is-danger is-light">
+    <button class="delete"></button>
+  </div>
+
   <script>
     let submit = document.querySelector('#submit-button');
-    let notification = document.querySelector('.notification');
+    let notification = document.querySelector('.notification.is-primary');
+    let error = document.querySelector('.notification.is-danger');
 
     function sendExp() {
       let expType = document.querySelector('#exp-type').value;
       let expAmount = document.querySelector('#exp-amount').value;
+
+      if (!expAmount) {
+       error.appendChild(document.createTextNode("Inserire una cifra"));
+        error.classList.add('active');
+
+        setTimeout(() => {
+          error.parentNode.removeChild(notification);
+          location.reload();
+        }, 3000); 
+
+        return;
+      }
 
       fetch('https://script.google.com/macros/s/AKfycbz-pO2A9ZRmOePYEIIRAv_oqkKkhK0_7UGRRhwTzqHDCvX2GOLIQhpWBQR3NOIOE826/exec', {
         method: 'POST',
@@ -91,6 +108,7 @@
         
         setTimeout(() => {
           notification.parentNode.removeChild(notification);
+          location.reload();
         }, 3000);
       }).catch(function (e) {
         notification.innerHTML = "Errore, aprire console per i dettagli."
