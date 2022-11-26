@@ -53,6 +53,13 @@
         </div>
       </div>
       
+      <div class="field">
+        <label class="label">Note</label>
+        <div class="control">
+          <input id="exp-notes" class="input" type="text" placeholder="Dettagli...">
+        </div>
+      </div>
+      
       <div class="field is-grouped">
         <div class="control">
           <button id="submit-button" class="button is-link">Salva</button>
@@ -77,6 +84,7 @@
     function sendExp() {
       let expType = document.querySelector('#exp-type').value;
       let expAmount = document.querySelector('#exp-amount').value;
+      let expNotes = document.querySelector('#exp-notes').value;
 
       if (!expAmount) {
        error.appendChild(document.createTextNode("Inserire una cifra"));
@@ -90,7 +98,7 @@
         return;
       }
 
-      fetch('https://script.google.com/macros/s/AKfycbzjtVDeohiLG4Dt2Kz8-tmBmbVS2h58e5NK3tJ_iJppT-CcHsEE3_a_DFeKkM8aJhKK/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbw5Nb3PmbFt6EwRsj7Rh0z9GPoQIbFx1vxS9xJO0bn5c3vg_UlXgQyKcHenR7bj0EFQ/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
@@ -98,7 +106,8 @@
         },
         body: JSON.stringify({
           type: expType,
-          amount: expAmount
+          amount: expAmount,
+          notes: expNotes
         })
       }).then(function (response) {
         notification.appendChild(document.createTextNode("Salvato."));
