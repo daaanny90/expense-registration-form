@@ -38,6 +38,10 @@
         <label class="label">Denaro speso</label>
         <div class="control">
           <input id="exp-amount" class="input" pattern="[0-9]+([,\.][0-9]+)?" type="number" title="The number input must start with a number and use either comma or a dot as a decimal character." placeholder="Text input">
+          <div class="info-box is-flex">
+            <?xml version="1.0" ?><svg height="16" width="16" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h48v48h-48z" fill="none"/><path d="M22 34h4v-12h-4v12zm2-30c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20-8.95-20-20-20zm0 36c-8.82 0-16-7.18-16-16s7.18-16 16-16 16 7.18 16 16-7.18 16-16 16zm-2-22h4v-4h-4v4z"/></svg>
+            <p class="ml-2 is-size-7">Usare il punto e non la virgola per i decimali</p>
+          </div>
         </div>
       </div>
     
@@ -86,10 +90,9 @@
       let expAmount = document.querySelector('#exp-amount').value;
       let expNotes = document.querySelector('#exp-notes').value;
       
-      expAmount.replace(",",".")
-
       if (!expAmount) {
-       error.appendChild(document.createTextNode("Inserire una cifra"));
+        console.log(expAmount)
+       error.appendChild(document.createTextNode("Errore nella cifra."));
         error.classList.add('active');
 
         setTimeout(() => {
@@ -99,6 +102,8 @@
 
         return;
       }
+
+      console.log(expAmount)
 
       fetch('https://script.google.com/macros/s/AKfycbxe267MB1efck7I57w4-teoGqEIOurMn_5a1dJa9bKleu8pVVPCvTZa112txEiJl7BM/exec', {
         method: 'POST',
