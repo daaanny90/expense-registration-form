@@ -85,6 +85,8 @@
       let expType = document.querySelector('#exp-type').value;
       let expAmount = document.querySelector('#exp-amount').value;
       let expNotes = document.querySelector('#exp-notes').value;
+      
+      expAmount.replace(",",".")
 
       if (!expAmount) {
        error.appendChild(document.createTextNode("Inserire una cifra"));
