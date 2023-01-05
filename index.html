@@ -29,13 +29,36 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="#">
-          <img
-            src="logo.png"
-            alt="Family App to manage personal finance"
-            width="120"
-            height="48"
-          />
+          <span style="font-size: 3rem; margin-right: 1rem">🤑</span>
+          <strong>Family Budget</strong>
         </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link"> Budgets </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item"> Danny: <span id="danny"></span> €</a>
+              <a class="navbar-item"> Erica: <span id="erica"></span> €</a>
+              <a class="navbar-item"> Family: <span id="family"></span> €</a>
+              <a class="navbar-item">
+                Fondo sicurezza: <span id="fondo"></span> €</a
+              >
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
 
@@ -114,19 +137,54 @@
 
     <script>
       const url =
-        "https://script.google.com/macros/s/AKfycbzun0MA9Gorhjidw94F33ObLd1pbKz6H2vTukIDMQkqu0XFgibXqdxH85SMvzF6a3ZE/exec";
+        "https://script.google.com/macros/s/AKfycbybtkmzJ2oKtVMnWe3z8TED2afoNt-buXTOoOnO1GmfH0kpHL_4RIrAblfGH7CpxNen/exec";
+      
+     /*
+      * Mobile menu functionality
+      */
+      document.addEventListener("DOMContentLoaded", () => {
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(
+          document.querySelectorAll(".navbar-burger"),
+          0
+        );
+
+        // Add a click event on each of them
+        $navbarBurgers.forEach((el) => {
+          el.addEventListener("click", () => {
+            // Get the target from the "data-target" attribute
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+
+            // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+            el.classList.toggle("is-active");
+            $target.classList.toggle("is-active");
+          });
+        });
+      });
 
       let submit = document.querySelector("#submit-button");
       let notification = document.querySelector(".notification.is-primary");
       let error = document.querySelector(".notification.is-danger");
 
+      /*
+      * Get budgets amount on load and populate the dropdown
+      */
       fetch(url, {
         method: "GET",
-        mode: "no-cors",
+        // mode: "no-cors",
       }).then((resp) => {
-        console.log(resp);
+        resp.json().then((accounts) => {
+          document.querySelector("#danny").innerHTML = accounts.extra_danny;
+          document.querySelector("#erica").innerHTML = accounts.extra_erica;
+          document.querySelector("#family").innerHTML = accounts.extra_famiglia;
+          document.querySelector("#fondo").innerHTML = accounts.fondo_risparmio;
+        });
       });
 
+      /*
+      * Register an expense
+      */
       function sendExp() {
         let expType = document.querySelector("#exp-type").value;
         let expAmount = document.querySelector("#exp-amount").value;
