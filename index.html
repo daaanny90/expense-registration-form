@@ -81,9 +81,17 @@
   </div>
 
   <script>
+    const url = "https://script.google.com/macros/s/AKfycbwOM-5I8GG4O7cFxSDVPn6SnDSj4otEQJLFzLF4CZ9QuIrdGaFdw0WYRIh-hGLrLf3m/exec";
+    
     let submit = document.querySelector('#submit-button');
     let notification = document.querySelector('.notification.is-primary');
     let error = document.querySelector('.notification.is-danger');
+    
+    fetch(url, {
+      method: 'GET'
+    }).then(resp => {
+      console.log(JSON.parse(resp.text()))
+    })
 
     function sendExp() {
       let expType = document.querySelector('#exp-type').value;
@@ -105,7 +113,7 @@
 
       console.log(expAmount)
 
-      fetch('https://script.google.com/macros/s/AKfycbyLHbyWHOWvei-GbxA9VhhVNgucaXHrP7xs-RiCX9q1hIG5_KvryidMLtOx8wjEMaZU/exec', {
+      fetch(url, {
         method: 'POST',
         mode: 'no-cors',
         headers: {
