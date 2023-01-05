@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Family Budget</title>
-    <link rel="icon" type="image/x-icon" href="favicon.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <base target="_top">
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <base target="_top" />
 
     <style>
       .notification {
@@ -26,129 +29,161 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="#">
-          <img src="logo.png"
-          alt="Family App to manage personal finance" width="120" height="48"/>
+          <img
+            src="logo.png"
+            alt="Family App to manage personal finance"
+            width="120"
+            height="48"
+          />
         </a>
-    </div>
-  </nav>
-  
-  <section class="section">
-    <div class="container">
-      <div class="field">
-        <label class="label">Denaro speso</label>
-        <div class="control">
-          <input id="exp-amount" class="input" pattern="[0-9]+([,\.][0-9]+)?" type="number" title="The number input must start with a number and use either comma or a dot as a decimal character." placeholder="Text input">
-          <div class="info-box is-flex">
-            <?xml version="1.0" ?><svg height="16" width="16" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h48v48h-48z" fill="none"/><path d="M22 34h4v-12h-4v12zm2-30c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20-8.95-20-20-20zm0 36c-8.82 0-16-7.18-16-16s7.18-16 16-16 16 7.18 16 16-7.18 16-16 16zm-2-22h4v-4h-4v4z"/></svg>
-            <p class="ml-2 is-size-7">Usare il punto e non la virgola per i decimali</p>
+      </div>
+    </nav>
+
+    <section class="section">
+      <div class="container">
+        <div class="field">
+          <label class="label">Denaro speso</label>
+          <div class="control">
+            <input
+              id="exp-amount"
+              class="input"
+              pattern="[0-9]+([,\.][0-9]+)?"
+              type="number"
+              title="The number input must start with a number and use either comma or a dot as a decimal character."
+              placeholder="Text input"
+            />
+            <div class="info-box is-flex">
+              <?xml version="1.0" ?><svg
+                height="16"
+                width="16"
+                viewBox="0 0 48 48"
+                width="48"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M0 0h48v48h-48z" fill="none" />
+                <path
+                  d="M22 34h4v-12h-4v12zm2-30c-11.05 0-20 8.95-20 20s8.95 20 20 20 20-8.95 20-20-8.95-20-20-20zm0 36c-8.82 0-16-7.18-16-16s7.18-16 16-16 16 7.18 16 16-7.18 16-16 16zm-2-22h4v-4h-4v4z"
+                />
+              </svg>
+              <p class="ml-2 is-size-7">
+                Usare il punto e non la virgola per i decimali
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Tipo di spesa</label>
+          <div class="control">
+            <div class="select">
+              <select id="exp-type">
+                <option value="1">Spesa Alimentare</option>
+                <option value="2">Altro</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Note</label>
+          <div class="control">
+            <input
+              id="exp-notes"
+              class="input"
+              type="text"
+              placeholder="Dettagli..."
+            />
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button id="submit-button" class="button is-link">Salva</button>
           </div>
         </div>
       </div>
-    
-      <div class="field">
-        <label class="label">Tipo di spesa</label>
-        <div class="control">
-          <div class="select">
-            <select id="exp-type">
-              <option value="1">Spesa Alimentare</option>
-              <option value="2">Altro</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      
-      <div class="field">
-        <label class="label">Note</label>
-        <div class="control">
-          <input id="exp-notes" class="input" type="text" placeholder="Dettagli...">
-        </div>
-      </div>
-      
-      <div class="field is-grouped">
-        <div class="control">
-          <button id="submit-button" class="button is-link">Salva</button>
-        </div>
-      </div>
+    </section>
+
+    <div class="notification is-primary is-light">
+      <button class="delete"></button>
     </div>
-  </section>
 
-  <div class="notification is-primary is-light">
-    <button class="delete"></button>
-  </div>
+    <div class="notification is-danger is-light">
+      <button class="delete"></button>
+    </div>
 
-  <div class="notification is-danger is-light">
-    <button class="delete"></button>
-  </div>
+    <script>
+      const url =
+        "https://script.google.com/macros/s/AKfycbzun0MA9Gorhjidw94F33ObLd1pbKz6H2vTukIDMQkqu0XFgibXqdxH85SMvzF6a3ZE/exec";
 
-  <script>
-    const url = "https://script.google.com/macros/s/AKfycbwOM-5I8GG4O7cFxSDVPn6SnDSj4otEQJLFzLF4CZ9QuIrdGaFdw0WYRIh-hGLrLf3m/exec";
-    
-    let submit = document.querySelector('#submit-button');
-    let notification = document.querySelector('.notification.is-primary');
-    let error = document.querySelector('.notification.is-danger');
-    
-    fetch(url, {
-      method: 'GET'
-    }).then(resp => {
-      console.log(JSON.parse(resp.text()))
-    })
-
-    function sendExp() {
-      let expType = document.querySelector('#exp-type').value;
-      let expAmount = document.querySelector('#exp-amount').value;
-      let expNotes = document.querySelector('#exp-notes').value;
-      
-      if (!expAmount) {
-        console.log(expAmount)
-       error.appendChild(document.createTextNode("Errore nella cifra."));
-        error.classList.add('active');
-
-        setTimeout(() => {
-          error.parentNode.removeChild(notification);
-          location.reload();
-        }, 3000); 
-
-        return;
-      }
-
-      console.log(expAmount)
+      let submit = document.querySelector("#submit-button");
+      let notification = document.querySelector(".notification.is-primary");
+      let error = document.querySelector(".notification.is-danger");
 
       fetch(url, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          type: expType,
-          amount: expAmount,
-          notes: expNotes
+        method: "GET",
+        mode: "no-cors",
+      }).then((resp) => {
+        console.log(resp);
+      });
+
+      function sendExp() {
+        let expType = document.querySelector("#exp-type").value;
+        let expAmount = document.querySelector("#exp-amount").value;
+        let expNotes = document.querySelector("#exp-notes").value;
+
+        if (!expAmount) {
+          console.log(expAmount);
+          error.appendChild(document.createTextNode("Errore nella cifra."));
+          error.classList.add("active");
+
+          setTimeout(() => {
+            error.parentNode.removeChild(notification);
+            location.reload();
+          }, 3000);
+
+          return;
+        }
+
+        console.log(expAmount);
+
+        fetch(url, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: expType,
+            amount: expAmount,
+            notes: expNotes,
+          }),
         })
-      }).then(function (response) {
-        notification.appendChild(document.createTextNode("Salvato."));
-        notification.classList.add('active');
-        
+          .then(function (response) {
+            notification.appendChild(document.createTextNode("Salvato."));
+            notification.classList.add("active");
+
+            setTimeout(() => {
+              notification.parentNode.removeChild(notification);
+              location.reload();
+            }, 3000);
+          })
+          .catch(function (e) {
+            notification.innerHTML = "Errore, aprire console per i dettagli.";
+            console.error(e);
+          });
+      }
+
+      function showNotification(text) {
+        notification.appendChild(document.createTextNode(text));
+
+        notification.classList.add("active");
         setTimeout(() => {
-          notification.parentNode.removeChild(notification);
-          location.reload();
+          document.querySelector(".delete").click();
         }, 3000);
-      }).catch(function (e) {
-        notification.innerHTML = "Errore, aprire console per i dettagli."
-        console.error(e);
-      })
-    }
+      }
 
-    function showNotification(text) {
-      notification.appendChild(document.createTextNode(text));
-
-      notification.classList.add('active');
-      setTimeout(() => {
-        document.querySelector('.delete').click();
-      }, 3000);
-    }
-    
-    submit.addEventListener("click", sendExp);
-  </script>
-</body>
-
+      submit.addEventListener("click", sendExp);
+    </script>
+  </body>
 </html>
