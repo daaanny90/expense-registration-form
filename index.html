@@ -213,7 +213,7 @@
       /*
        * Get budgets amount on load and populate the dropdown
        */
-      fetch(url, {
+      fetch(GOOGLE_URL, {
         method: "GET",
       }).then((resp) => {
         resp.json().then((accounts) => {
@@ -261,7 +261,7 @@
 
         showModal(expenseTypes[expType]);
 
-        fetch(url, {
+        fetch(GOOGLE_URL, {
           method: "POST",
           mode: "no-cors",
           headers: {
@@ -274,7 +274,7 @@
           }),
         })
           .then(function (response) {
-            fetch(url, {
+            fetch(GOOGLE_URL, {
               method: "GET",
             }).then((resp) => {
               resp.json().then((accounts) => {
