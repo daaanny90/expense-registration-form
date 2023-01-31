@@ -56,6 +56,18 @@
               <a class="navbar-item">
                 Fondo sicurezza: <span id="fondo"></span> €</a
               >
+              <a class="navbar-item">
+                Spesa alimentare: <span id="grocery-total"></span>/<span
+                  id="grocery-available"
+                ></span>
+                €</a
+              >
+              <a class="navbar-item">
+                Altro: <span id="extra-total"></span>/<span
+                  id="extra-available"
+                ></span>
+                €</a
+              >
             </div>
           </div>
         </div>
@@ -135,13 +147,37 @@
       <button class="delete"></button>
     </div>
 
+    <div class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+          <p class="loading-budgets">Salvataggio...</p>
+          <div class="available-budget is-hidden">
+            <h2>Budget <span class="exp-type"></span>:</h2>
+            <span class="available"></span>
+            <progress
+              class="progress is-info is-hidden"
+              value="45"
+              max="100"
+            ></progress>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
     <script>
+      const expenseTypes = {
+        1: "Spesa alimentare",
+        2: "Altro",
+      };
+
       const url =
-        "https://script.google.com/macros/s/AKfycbybtkmzJ2oKtVMnWe3z8TED2afoNt-buXTOoOnO1GmfH0kpHL_4RIrAblfGH7CpxNen/exec";
-      
-     /*
-      * Mobile menu functionality
-      */
+        "https://script.google.com/macros/s/AKfycbwVwKWgrx5ZhtV2AuaMXMBHyCzWIdbt-ppVeIGUQvb4edHIcO8rYp1h0j66wrsDQrpJ/exec";
+
+      /*
+       * Mobile menu functionality
+       */
       document.addEventListener("DOMContentLoaded", () => {
         // Get all "navbar-burger" elements
         const $navbarBurgers = Array.prototype.slice.call(
@@ -163,28 +199,48 @@
         });
       });
 
+      document
+        .querySelector(".modal-close")
+        .addEventListener("click", closeModal);
+      document
+        .querySelector(".modal-background")
+        .addEventListener("click", closeModal);
+
       let submit = document.querySelector("#submit-button");
       let notification = document.querySelector(".notification.is-primary");
       let error = document.querySelector(".notification.is-danger");
 
       /*
-      * Get budgets amount on load and populate the dropdown
-      */
+       * Get budgets amount on load and populate the dropdown
+       */
       fetch(url, {
         method: "GET",
-        // mode: "no-cors",
       }).then((resp) => {
         resp.json().then((accounts) => {
           document.querySelector("#danny").innerHTML = accounts.extra_danny;
           document.querySelector("#erica").innerHTML = accounts.extra_erica;
           document.querySelector("#family").innerHTML = accounts.extra_famiglia;
           document.querySelector("#fondo").innerHTML = accounts.fondo_risparmio;
+          document.querySelector("#grocery-total").innerHTML = Math.round(
+            accounts.budget_grocery.total
+          );
+          document.querySelector("#grocery-available").innerHTML = Math.round(
+            accounts.budget_grocery.available
+          );
+          document.querySelector("#extra-total").innerHTML = Math.round(
+            accounts.budget_extra.total
+          );
+          document.querySelector("#extra-available").innerHTML = Math.round(
+            accounts.budget_extra.available
+          );
+
+          console.log(accounts);
         });
       });
 
       /*
-      * Register an expense
-      */
+       * Register an expense
+       */
       function sendExp() {
         let expType = document.querySelector("#exp-type").value;
         let expAmount = document.querySelector("#exp-amount").value;
@@ -203,7 +259,7 @@
           return;
         }
 
-        console.log(expAmount);
+        showModal(expenseTypes[expType]);
 
         fetch(url, {
           method: "POST",
@@ -218,13 +274,40 @@
           }),
         })
           .then(function (response) {
-            notification.appendChild(document.createTextNode("Salvato."));
-            notification.classList.add("active");
-
-            setTimeout(() => {
-              notification.parentNode.removeChild(notification);
-              location.reload();
-            }, 3000);
+            fetch(url, {
+              method: "GET",
+            }).then((resp) => {
+              resp.json().then((accounts) => {
+                const budget =
+                  expType === 1
+                    ? accounts.budget_grocery
+                    : accounts.budget_extra;
+                document
+                  .querySelector(".loading-budgets")
+                  .classList.add("is-hidden");
+                document
+                  .querySelector(".available-budget")
+                  .classList.remove("is-hidden");
+                if (Math.round(budget.available) > 0) {
+                  document
+                    .querySelector(".progress")
+                    .classList.remove("is-hidden");
+                  document.querySelector(
+                    ".available"
+                  ).textContent = `Disponibili ancora ${Math.round(
+                    budget.available
+                  )} €`;
+                  document.querySelector(".progress").max = Math.round(
+                    budget.total
+                  );
+                  document.querySelector(".progress").value = Math.round(
+                    budget.available
+                  );
+                }
+                document.querySelector(".available").textContent =
+                  "Budget terminato.";
+              });
+            });
           })
           .catch(function (e) {
             notification.innerHTML = "Errore, aprire console per i dettagli.";
@@ -232,13 +315,22 @@
           });
       }
 
+      function showModal(expType) {
+        document.querySelector(".exp-type").textContent = expType;
+        document.querySelector(".modal").classList.add("is-active");
+      }
+
+      function closeModal() {
+        document.querySelector(".modal").classList.remove("is-active");
+      }
+
       function showNotification(text) {
         notification.appendChild(document.createTextNode(text));
 
         notification.classList.add("active");
-        setTimeout(() => {
-          document.querySelector(".delete").click();
-        }, 3000);
+        // setTimeout(() => {
+        //   document.querySelector(".delete").click();
+        // }, 3000);
       }
 
       submit.addEventListener("click", sendExp);
