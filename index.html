@@ -57,16 +57,26 @@
                 Fondo sicurezza: <span id="fondo"></span> €</a
               >
               <a class="navbar-item">
-                Spesa alimentare: <span id="grocery-total"></span>/<span
+                Spesa alimentare: <span
                   id="grocery-available"
-                ></span>
-                €</a
+                ></span><span id="grocery-total"></span>
+                <progress
+              class="progress-menu-grocery is-info is-hidden"
+              value="45"
+              max="100"
+            ></progress>
+                </a
               >
               <a class="navbar-item">
-                Altro: <span id="extra-total"></span>/<span
+                Altro: <span
                   id="extra-available"
-                ></span>
-                €</a
+                ></span><span id="extra-total"></span>
+                <progress
+              class="progress-menu-extra is-info is-hidden"
+              value="45"
+              max="100"
+            ></progress>
+                </a
               >
             </div>
           </div>
@@ -213,7 +223,7 @@
       /*
        * Get budgets amount on load and populate the dropdown
        */
-      fetch(process.env.GOOGLE_URL, {
+      fetch(url, {
         method: "GET",
       }).then((resp) => {
         resp.json().then((accounts) => {
@@ -221,20 +231,38 @@
           document.querySelector("#erica").innerHTML = accounts.extra_erica;
           document.querySelector("#family").innerHTML = accounts.extra_famiglia;
           document.querySelector("#fondo").innerHTML = accounts.fondo_risparmio;
-          document.querySelector("#grocery-total").innerHTML = Math.round(
-            accounts.budget_grocery.total
-          );
-          document.querySelector("#grocery-available").innerHTML = Math.round(
-            accounts.budget_grocery.available
-          );
-          document.querySelector("#extra-total").innerHTML = Math.round(
-            accounts.budget_extra.total
-          );
-          document.querySelector("#extra-available").innerHTML = Math.round(
-            accounts.budget_extra.available
-          );
 
-          console.log(accounts);
+          if (Math.round(accounts.budget_grocery.available) > 0) {
+            document.querySelector('progress-menu-grocery').classList.remove('is-hidden')
+            document.querySelector("#grocery-total").innerHTML = ' / ' + Math.round(
+              accounts.budget_grocery.total
+            ) + '€';
+            document.querySelector("#grocery-available").innerHTML = Math.round(
+              accounts.budget_grocery.available
+            ) + '€';
+            document.querySelector('.progress-menu-grocery').max = accounts.budget_grocery.total
+            document.querySelector('.progress-menu-grocery').value = accounts.budget_grocery.available
+          } else {
+           document.querySelector("#grocery-available").innerHTML = `Budget (${Math.round(accounts.budget_grocery.total)}€) terminato. Spesi ${Math.round(
+              accounts.budget_grocery.available
+            ) * -1}€ oltre il budget. (Totale ${Math.round(accounts.budget_grocery.total + (Math.round(accounts.budget_grocery.available * -1)))} €)`;
+          }
+
+          if (Math.round(accounts.budget_extra.available) > 0) {
+            document.querySelector('progress-menu-extra').classList.remove('is-hidden')
+            document.querySelector("#extra-total").innerHTML = ' / ' + Math.round(
+              accounts.budget_extra.total
+            ) + '€';
+            document.querySelector("#extra-available").innerHTML = Math.round(
+              accounts.budget_extra.available
+            ) + '€';
+            document.querySelector('.progress-menu-extra').max = accounts.budget_extra.total
+            document.querySelector('.progress-menu-extra').value = accounts.budget_extra.available
+          } else {
+            document.querySelector("#extra-available").innerHTML = `Budget (${Math.round(accounts.budget_extra.total)}€) terminato. Spesi ${Math.round(
+              accounts.budget_extra.available
+            ) * -1}€ oltre il budget. (Totale ${Math.round(accounts.budget_extra.total + (Math.round(accounts.budget_extra.available * -1)))} €)`;
+          }
         });
       });
 
@@ -261,7 +289,7 @@
 
         showModal(expenseTypes[expType]);
 
-        fetch(process.env.GOOGLE_URL, {
+        fetch(url, {
           method: "POST",
           mode: "no-cors",
           headers: {
@@ -274,7 +302,7 @@
           }),
         })
           .then(function (response) {
-            fetch(process.env.GOOGLE_URL, {
+            fetch(url, {
               method: "GET",
             }).then((resp) => {
               resp.json().then((accounts) => {
