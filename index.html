@@ -183,7 +183,7 @@
       };
 
       const url =
-        "https://script.google.com/macros/s/AKfycbxLxV7qBDty9vCaiAj_WykPt0bUwfeTS51mmOiz3CIB8dsYiCZEVU3Adc9ghHkK8mi0/exec";
+        "https://script.google.com/macros/s/AKfycbz08EnUKB0PJTZd9NRzNARaNsjFsXwBUBLnBCF81dJ0KjHZYk_GrB9esgoC1Mhw77lh/exec";
 
       /*
        * Mobile menu functionality
@@ -233,7 +233,7 @@
           document.querySelector("#fondo").innerHTML = accounts.fondo_risparmio;
 
           if (Math.round(accounts.budget_grocery.available) > 0) {
-            document.querySelector('progress-menu-grocery').classList.remove('is-hidden')
+            document.querySelector('.progress-menu-grocery').classList.remove('is-hidden')
             document.querySelector("#grocery-total").innerHTML = ' / ' + Math.round(
               accounts.budget_grocery.total
             ) + '€';
@@ -249,7 +249,7 @@
           }
 
           if (Math.round(accounts.budget_extra.available) > 0) {
-            document.querySelector('progress-menu-extra').classList.remove('is-hidden')
+            document.querySelector('.progress-menu-extra').classList.remove('is-hidden')
             document.querySelector("#extra-total").innerHTML = ' / ' + Math.round(
               accounts.budget_extra.total
             ) + '€';
@@ -289,12 +289,6 @@
 
         showModal(expenseTypes[expType]);
 
-        console.log(JSON.stringify({
-            type: expType,
-            amount: expAmount,
-            notes: expNotes,
-          }))
-
         fetch(url, {
           method: "POST",
           mode: "no-cors",
@@ -308,15 +302,15 @@
           }),
         })
           .then(function (response) {
-            response.text().then(rsp => {console.log(rsp)})
             fetch(url, {
               method: "GET",
             }).then((resp) => {
               resp.json().then((accounts) => {
                 const budget =
-                  expType === 1
+                  Number(expType) === 1
                     ? accounts.budget_grocery
                     : accounts.budget_extra;
+
                 document
                   .querySelector(".loading-budgets")
                   .classList.add("is-hidden");
@@ -338,6 +332,7 @@
                   document.querySelector(".progress").value = Math.round(
                     budget.available
                   );
+                  return;
                 }
                 document.querySelector(".available").textContent =
                   "Budget terminato.";
@@ -357,6 +352,7 @@
 
       function closeModal() {
         document.querySelector(".modal").classList.remove("is-active");
+        location.reload()
       }
 
       function showNotification(text) {
